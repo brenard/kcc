@@ -279,6 +279,15 @@ class ComicPage:
         # Quantize is deprecated but new function call it internally anyway...
         self.image = self.image.quantize(palette=palImg)
 
+    def getAdaptiveSize(self,size):
+        nsize=[size[0],size[1]]
+        nsize[1]=size[1]
+        nsize[0]=int(self.image.size[0]*nsize[1]/self.image.size[1])
+        if nsize[0]>size[0]:
+          nsize[0]=size[0]
+          nsize[1]=int(self.image.size[1]*nsize[0]/self.image.size[0])
+        return nsize
+
     def resizeImage(self):
         if self.hqMode:
             size = (self.panelviewsize[0], self.panelviewsize[1])
@@ -291,7 +300,11 @@ class ComicPage:
             else:
                 method = Image.LANCZOS
             if self.opt.stretch:
-                self.image = self.image.resize(size, method)
+                if self.opt.keepratio:
+                    nsize=self.getAdaptiveSize(size)
+                else:
+                    nsize=size
+                self.image = self.image.resize(nsize, method)
             elif self.image.size[0] <= size[0] and self.image.size[1] <= size[1] and not self.opt.upscale:
                 if self.opt.format == 'CBZ':
                     borderw = int((size[0] - self.image.size[0]) / 2)

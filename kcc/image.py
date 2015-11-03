@@ -23,6 +23,7 @@ from urllib.parse import quote
 from PIL import Image, ImageOps, ImageStat, ImageChops
 from .shared import md5Checksum
 from . import __version__
+import numpy
 
 
 class ProfileData:
@@ -138,7 +139,7 @@ class ComicPageParser:
                 self.payload.append(['S1', self.source, pageone, self.color, self.fill])
                 self.payload.append(['S2', self.source, pagetwo, self.color, self.fill])
             if self.opt.splitter > 0 or self.opt.forcerotate:
-                self.payload.append(['R', self.source, self.image.rotate(90, Image.BICUBIC, True),
+                self.payload.append(['R', self.source, Image.fromarray(numpy.rot90(numpy.array(self.image), 1)),
                                     self.color, self.fill])
         else:
             self.payload.append(['N', self.source, self.image, self.color, self.fill])

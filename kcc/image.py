@@ -119,8 +119,8 @@ class ComicPageParser:
         width, height = self.image.size
         dstwidth, dstheight = self.size
         # Only split if origin is not oriented the same as target
-        if (width > height) != (dstwidth > dstheight) and not self.opt.webtoon:
-            if self.opt.splitter != 1:
+        if self.opt.forcerotate or ( (width > height) != (dstwidth > dstheight) and not self.opt.webtoon ):
+            if self.opt.splitter != 1 and not self.opt.forcerotate:
                 if width > height:
                     # Source is landscape, so split by the width
                     leftbox = (0, 0, int(width / 2), height)
@@ -137,7 +137,7 @@ class ComicPageParser:
                     pagetwo = self.image.crop(rightbox)
                 self.payload.append(['S1', self.source, pageone, self.color, self.fill])
                 self.payload.append(['S2', self.source, pagetwo, self.color, self.fill])
-            if self.opt.splitter > 0:
+            if self.opt.splitter > 0 or self.opt.forcerotate:
                 self.payload.append(['R', self.source, self.image.rotate(90, Image.BICUBIC, True),
                                     self.color, self.fill])
         else:

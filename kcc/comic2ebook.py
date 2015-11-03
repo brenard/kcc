@@ -978,6 +978,8 @@ def makeParser():
                                  help="Force keeping ratio stretching images")
     processingOptions.add_option("-r", "--splitter", type="int", dest="splitter", default="0",
                                  help="Double page parsing mode. 0: Split 1: Rotate 2: Both [Default=0]")
+    processingOptions.add_option("--forcerotate", action="store_true", dest="forcerotate", default=False,
+                                 help="Force image rotation (horizontal mode)")
     processingOptions.add_option("-g", "--gamma", type="float", dest="gamma", default="0.0",
                                  help="Apply gamma correction to linearize the image [Default=Auto]")
     processingOptions.add_option("--hq", action="store_true", dest="hqmode", default=False,
